@@ -9,6 +9,15 @@ import openai
 
 load_dotenv()
 
+# On Streamlit Cloud, the key comes from st.secrets instead of a .env file.
+# Falls back to the environment variable when running locally.
+try:
+    import streamlit as st
+    if "OPENAI_API_KEY" in st.secrets:
+        os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+except Exception:
+    pass
+
 MAX_FILE_SIZE_MB = 20
 MIN_EXTRACTED_CHARS = 200  # below this, the PDF is probably scanned/image-only
 MAX_HISTORY_TURNS = 4      # how many past question/answer pairs to keep as context
